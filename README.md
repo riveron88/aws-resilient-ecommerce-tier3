@@ -8,7 +8,6 @@
 A production-grade, highly available, and fault-tolerant 3-Tier Web Architecture deployed on AWS. Designed with strict security (SG chaining), stateless application nodes, and aggressive FinOps cost-optimization strategies.
 
 ## 🏗️ Architecture Diagram
-*(Aquí irá el diagrama que vas a dibujar)*
 ![Architecture Diagram](./docs/architecture_diagram.png)
 
 ## 📖 The Story (STAR Method)
