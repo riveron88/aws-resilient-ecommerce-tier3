@@ -34,3 +34,16 @@ I architected a decoupled, secure, and stateless infrastructure:
 - **High Availability:** Achieved a resilient architecture capable of surviving an AZ failure with zero data loss.
 - **Scalability:** The platform now scales horizontally based on actual HTTP request loads, handling traffic spikes effortlessly.
 - **Cost Efficiency:** Infrastructure costs were reduced by using Spot instances, ARM Graviton processors, and automated nocturnal shutdowns.
+
+## 📂 Repository Structure
+* `/docs`: Contains the architecture diagram and the `architecture.mmd` Mermaid source code (Diagrams as Code).
+* `/infrastructure`: Contains the custom IAM least-privilege policies and the CloudWatch Agent JSON configuration.
+* `/src`: Contains the Python (Boto3) code for the FinOps Lambda automations (Start/Stop/Redirect) safely decoupled with Environment Variables, along with the EC2 `user_data_setup.sh` script.
+
+## 🔒 IAM & Security (Least Privilege)
+The EC2 instances in the Auto Scaling Group run under a strictly scoped IAM Role (`ROLE-MEM-ASG`) with the following permissions:
+* **AWS Managed Policies:**
+  * `AmazonSSMManagedInstanceCore`: Enables secure Systems Manager (SSM) sessions and Chaos Engineering parameter injection.
+  * `CloudWatchAgentServerPolicy`: Allows the instance to stream RAM utilization metrics to CloudWatch.
+* **Custom Inline Policy:**
+  * Allows reading the exact CloudWatch Agent configuration from SSM Parameter Store (See `/infrastructure/iam_ssm_parameter_policy.json`).
