@@ -24,14 +24,14 @@ Internet((🌍 Internet))
 %% =====================================================
 subgraph LINK["RESOLUCIÓN DE NUEVO LINK"]
 
-    APIGW["🔌 Amazon API Gateway<br/>REST API"]
+    APIGW["🔌 Amazon API Gateway<br/>REST API"]
 
-    LambdaURL["⚡ AWS Lambda<br/>(Genera nuevo link)"]
+    LambdaURL["⚡ AWS Lambda<br/>(Genera nuevo link)"]
 
-    ParameterStore["📄 AWS Systems Manager<br/>Parameter Store<br/>(Guarda nuevo link)"]
+    ParameterStore["📄 AWS Systems Manager<br/>Parameter Store<br/>(Guarda nuevo link)"]
 
-    APIGW --> LambdaURL
-    LambdaURL --> ParameterStore
+    APIGW --> LambdaURL
+    LambdaURL --> ParameterStore
 
 end
 
@@ -40,79 +40,84 @@ end
 %% =====================================================
 subgraph AWS["☁️ AWS CLOUD"]
 
-    subgraph VPC["🌐 VPC - 10.0.0.0/16"]
+    subgraph VPC["🌐 VPC - 10.0.0.0/16"]
 
-        %% =========================================
-        %% LOAD BALANCER
-        %% =========================================
-        ALB["⚖️ Application Load Balancer<br/>HTTP : 80"]
+        %% =========================================
+        %% INTERNET GATEWAY (Borde de la VPC)
+        %% =========================================
+        IGW["🚪 Internet Gateway (IGW)"]
 
-        %% =========================================
-        %% PUBLIC SUBNET A
-        %% =========================================
-        subgraph PUBA["🟢 Public Subnet A<br/>10.0.1.0/24"]
+        %% =========================================
+        %% LOAD BALANCER
+        %% =========================================
+        ALB["⚖️ Application Load Balancer<br/>HTTP : 80"]
 
-            NATA["🛜 NAT Instance<br/>(Cost Optimized)"]
+        %% =========================================
+        %% PUBLIC SUBNET A
+        %% =========================================
+        subgraph PUBA["🟢 Public Subnet A<br/>10.0.1.0/24"]
 
-        end
+            NATA["🛜 NAT Instance<br/>(Cost Optimized)"]
 
-        %% =========================================
-        %% AZ A
-        %% =========================================
-        subgraph AZA["🏢 AZ A"]
+        end
 
-            subgraph APPA["🟠 Private App Subnet A<br/>10.0.11.0/24"]
+        %% =========================================
+        %% AZ A
+        %% =========================================
+        subgraph AZA["🏢 AZ A"]
 
-                ASGA["💻 Auto Scaling Group<br/><br/>Siempre al menos 1 On-Demand<br/>El resto Spot Instances"]
+            subgraph APPA["🟠 Private App Subnet A<br/>10.0.11.0/24"]
 
-                ONDA["🟦 On-Demand"]
-                SPOTA1["🟧 Spot"]
-                SPOTA2["🟧 Spot"]
-                SPOTA3["🟧 Spot"]
+                ASGA["💻 Auto Scaling Group<br/><br/>Siempre al menos 1 On-Demand<br/>El resto Spot Instances"]
 
-            end
+                ONDA["🟦 On-Demand"]
+                SPOTA1["🟧 Spot"]
+                SPOTA2["🟧 Spot"]
+                SPOTA3["🟧 Spot"]
 
-            subgraph DATAA["🔴 Private Data Subnet A<br/>10.0.21.0/24"]
+            end
 
-                RDSP[("🗄️ Amazon RDS MariaDB<br/>Primary (Multi-AZ)")]
+            subgraph DATAA["🔴 Private Data Subnet A<br/>10.0.21.0/24"]
 
-                DBA["DB + Sesiones PHP<br/><br/>Allow 3306 from SG-WebServers"]
+                RDSP[("🗄️ Amazon RDS MariaDB<br/>Primary (Multi-AZ)")]
 
-            end
+                DBA["DB + Sesiones PHP<br/><br/>Allow 3306 from SG-WebServers"]
 
-        end
+            end
 
-        %% =========================================
-        %% AZ B
-        %% =========================================
-        subgraph AZB["🏢 AZ B"]
+        end
 
-            subgraph APPB["🟠 Private App Subnet B<br/>10.0.12.0/24"]
+        %% =========================================
+        %% AZ B
+        %% =========================================
+        subgraph AZB["🏢 AZ B"]
 
-                ASGB["💻 Auto Scaling Group<br/><br/>Siempre al menos 1 On-Demand<br/>El resto Spot Instances"]
+            subgraph APPB["🟠 Private App Subnet B<br/>10.0.12.0/24"]
 
-                ONDB["🟦 On-Demand"]
-                SPOTB1["🟧 Spot"]
-                SPOTB2["🟧 Spot"]
+                ASGB["💻 Auto Scaling Group<br/><br/>Siempre al menos 1 On-Demand<br/>El resto Spot Instances"]
 
-            end
+                ONDB["🟦 On-Demand"]
+                SPOTB1["🟧 Spot"]
+                SPOTB2["🟧 Spot"]
 
-            subgraph DATAB["🔴 Private Data Subnet B<br/>10.0.22.0/24"]
+            end
 
-                RDSS[("🗄️ Amazon RDS MariaDB<br/>Standby (Multi-AZ)")]
+            subgraph DATAB["🔴 Private Data Subnet B<br/>10.0.22.0/24"]
 
-                DBB["DB + Sesiones PHP<br/><br/>Allow 3306 from SG-WebServers"]
+                RDSS[("🗄️ Amazon RDS MariaDB<br/>Standby (Multi-AZ)")]
 
-            end
+                DBB["DB + Sesiones PHP<br/><br/>Allow 3306 from SG-WebServers"]
 
-        end
+            end
 
-        %% =========================================
-        %% STORAGE
-        %% =========================================
-        EFS[("📁 Amazon EFS<br/>Almacenamiento Compartido<br/>(NFS)")]
+        end
 
-    end
+        %% =========================================
+        %% STORAGE
+        %% =========================================
+        EFS[("📁 Amazon EFS<br/>Almacenamiento Compartido<br/>(NFS)")]
+
+    end
 
 end
 
@@ -121,19 +126,19 @@ end
 %% =====================================================
 subgraph OPS["📊 OPERACIONES, OBSERVABILIDAD Y FINOPS"]
 
-    CW["📈 Amazon CloudWatch<br/>Métricas & Alarmas"]
+    CW["📈 Amazon CloudWatch<br/>Métricas & Alarmas"]
 
-    SNS["📩 Amazon SNS<br/>Alertas"]
+    SNS["📩 Amazon SNS<br/>Alertas"]
 
-    EventBridge["🕒 Amazon EventBridge<br/>Programación (Cron)"]
+    EventBridge["🕒 Amazon EventBridge<br/>Programación (Cron)"]
 
-    LambdaFinOps["⚡ AWS Lambda<br/>(FinOps)<br/>Start / Stop Resources"]
+    LambdaFinOps["⚡ AWS Lambda<br/>(FinOps)<br/>Start / Stop Resources"]
 
-    RES["• EC2 Auto Scaling Groups<br/>• RDS MariaDB (Primary)<br/>• NAT Instance"]
+    RES["• EC2 Auto Scaling Groups<br/>• RDS MariaDB (Primary)<br/>• NAT Instance"]
 
-    CW --> SNS
-    EventBridge --> LambdaFinOps
-    LambdaFinOps --> RES
+    CW --> SNS
+    EventBridge --> LambdaFinOps
+    LambdaFinOps --> RES
 
 end
 
@@ -142,22 +147,23 @@ end
 %% =====================================================
 subgraph SG["🔐 ENCADENAMIENTO DE SECURITY GROUPS"]
 
-    SGALB["SG-ALB<br/>Allow 80 from Internet"]
+    SGALB["SG-ALB<br/>Allow 80 from Internet"]
 
-    SGWEB["SG-WebServers<br/>Allow only from SG-ALB"]
+    SGWEB["SG-WebServers<br/>Allow only from SG-ALB"]
 
-    SGDB["SG-Database<br/>Allow 3306 only<br/>from SG-WebServers"]
+    SGDB["SG-Database<br/>Allow 3306 only<br/>from SG-WebServers"]
 
-    SGALB --> SGWEB
-    SGWEB --> SGDB
+    SGALB --> SGWEB
+    SGWEB --> SGDB
 
 end
 
 %% =====================================================
-%% FLUJO PRINCIPAL
+%% FLUJO PRINCIPAL (Con IGW)
 %% =====================================================
 User --> Internet
-Internet -->|HTTP 80| ALB
+Internet --> IGW
+IGW -->|HTTP 80| ALB
 
 %% =====================================================
 %% API GATEWAY RESOLUCIÓN
@@ -186,10 +192,11 @@ EFS <-.->|Montaje NFS| ASGA
 EFS <-.->|Montaje NFS| ASGB
 
 %% =====================================================
-%% NAT INTERNET ACCESS
+%% NAT INTERNET ACCESS (Con IGW)
 %% =====================================================
 ASGA -.->|Salida a Internet vía NAT A| NATA
 ASGB -.->|Salida a Internet vía NAT A| NATA
+NATA -.->|Tráfico de salida| IGW
 
 %% =====================================================
 %% MONITOREO
@@ -208,10 +215,11 @@ SGWEB -. Attached .-> ASGB
 SGDB -. Attached .-> RDSP
 
 %% =====================================================
-%% ESTILOS
+%% ESTILOS ADICIONALES
 %% =====================================================
 class AWS aws;
 class VPC network;
+class IGW aws;
 class PUBA public;
 class APPA,APPB privateApp;
 class DATAA,DATAB privateData;
