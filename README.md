@@ -13,10 +13,10 @@ A production-grade, highly available, and fault-tolerant 3-Tier Web Architecture
 ## 📖 The Story (STAR Method)
 
 ### Situation
-"TechNova", a growing e-commerce company, ran its entire stack on a single, oversized EC2 instance. They suffered from severe scalability issues during month-end sales (crashing under load) and experienced a 4-hour downtime incident due to hardware failure, resulting in significant revenue loss.
+A fast-growing e-commerce startup was running its entire web stack on a single, oversized EC2 instance. They suffered from severe scalability issues during month-end sales (crashing under heavy load) and experienced a critical 4-hour downtime incident due to underlying hardware failure, resulting in significant revenue loss.
 
 ### Task
-Design and implement a classic Highly Available (HA) Three-Tier Architecture that auto-scales dynamically with traffic, survives Availability Zone (AZ) failures, and maintains strict cost controls (FinOps).
+Design and implement a classic Highly Available (HA) Three-Tier Architecture that auto-scales dynamically with traffic, survives Availability Zone (AZ) failures gracefully, and maintains strict cost controls (FinOps).
 
 ### Action
 I architected a decoupled, secure, and stateless infrastructure:
