@@ -36,7 +36,7 @@ I architected a decoupled, secure, and stateless infrastructure:
 - **Cost Efficiency:** Infrastructure costs were reduced by using Spot instances, ARM Graviton processors, and automated nocturnal shutdowns.
 
 ## 📂 Repository Structure
-* `/docs`: Contains the architecture diagram and the `architecture.mmd` Mermaid source code (Diagrams as Code).
+* `/docs`: Contains the architecture diagram and the `architecture.md` Mermaid source code (Diagrams as Code).
 * `/infrastructure`: Contains the custom IAM least-privilege policies and the CloudWatch Agent JSON configuration.
 * `/src`: Contains the Python (Boto3) code for the FinOps Lambda automations (Start/Stop/Redirect) safely decoupled with Environment Variables, along with the EC2 `user_data_setup.sh` script.
 
